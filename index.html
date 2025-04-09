@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Happy Birthday ,Rahiq!</title>
+    <title>Happy Birthday!</title>
     <style>
         * {
             margin: 0;
@@ -373,6 +373,35 @@
                 padding-bottom: max(0px, env(safe-area-inset-bottom));
             }
         }
+
+        .signature {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            color: rgba(255, 255, 255, 0.5);
+            font-size: clamp(0.8rem, 2vw, 1rem);
+            font-family: 'Dancing Script', cursive;
+            opacity: 0;
+            transition: opacity 0.5s ease;
+            z-index: 2;
+            text-shadow: 0 0 5px rgba(255, 105, 180, 0.3);
+        }
+
+        .signature.show {
+            opacity: 1;
+        }
+
+        .signature span {
+            display: inline-block;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1); }
+        }
     </style>
     <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&display=swap" rel="stylesheet">
 </head>
@@ -394,6 +423,8 @@
                 <p style="font-size: 2.5rem; margin-top: 1.5rem;">❤️</p>
             </div>
         </div>
+
+        <div class="signature" id="signature">made by <span>🦇❤</span></div>
 
         <audio id="backgroundMusic" loop>
             <source src="https://github.com/maybeitsme123/rahiq_bd/raw/refs/heads/main/loop.mp3" type="audio/mpeg">
@@ -420,7 +451,10 @@
 
         // Show birthday content immediately
         birthdayContent.classList.add('show');
-
+        // Show signature after a delay
+        setTimeout(() => {
+            document.getElementById('signature').classList.add('show');
+        }, 1000);
 
         // Create confetti
         function createConfetti() {
