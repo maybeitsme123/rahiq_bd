@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Happy Birthday!</title>
+    <title>Happy Birthday ,Rahiq!</title>
     <style>
         * {
             margin: 0;
@@ -14,13 +14,18 @@
         body {
             font-family: 'Dancing Script', cursive;
             min-height: 100vh;
+            min-height: 100dvh; /* For mobile browsers */
             background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #e94560 100%);
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
             display: flex;
             flex-direction: column;
             justify-content: center;
             align-items: center;
             overflow: hidden;
             position: relative;
+            padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
         }
 
         body::before {
@@ -28,9 +33,12 @@
             position: fixed;
             top: 0;
             left: 0;
-            width: 100%;
-            height: 100%;
+            width: 100vw;
+            width: 100dvw;
+            height: 100vh;
+            height: 100dvh;
             background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><circle cx="50" cy="50" r="1" fill="rgba(255,255,255,0.2)"/></svg>') repeat;
+            background-size: 20px 20px;
             opacity: 0.1;
             z-index: 0;
             animation: twinkle 8s linear infinite;
@@ -45,8 +53,10 @@
             position: fixed;
             top: 0;
             left: 0;
-            width: 100%;
-            height: 100%;
+            width: 100vw;
+            width: 100dvw;
+            height: 100vh;
+            height: 100dvh;
             background: rgba(0, 0, 0, 0.8);
             z-index: 1000;
             display: flex;
@@ -66,14 +76,15 @@
             background: rgba(255, 255, 255, 0.1);
             backdrop-filter: blur(10px);
             border-radius: 20px;
-            padding: 20px;
+            padding: max(20px, 2vmin);
             box-shadow: 0 0 30px rgba(255, 105, 180, 0.3);
             transform: scale(0.8);
             transition: all 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
             border: 1px solid rgba(255, 255, 255, 0.2);
             overflow: hidden;
-            max-width: 90%;
-            max-height: 90vh;
+            width: min(90%, 1200px);
+            height: min(90vh, 90dvh);
+            aspect-ratio: 16/9;
         }
 
         #videoContainer.show .video-card {
@@ -81,36 +92,27 @@
         }
 
         #mainVideo {
-            max-width: 100%;
-            max-height: 80vh;
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
             border-radius: 10px;
             display: block;
         }
 
-        .rotate-prompt {
-            display: none;
-            position: fixed;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            background: rgba(0, 0, 0, 0.8);
-            color: white;
-            padding: 20px;
-            border-radius: 10px;
-            text-align: center;
-            z-index: 1001;
-            font-family: Arial, sans-serif;
-        }
 
         #birthdayContent {
-            width: 100%;
+            width: 100vw;
+            width: 100dvw;
             height: 100vh;
+            height: 100dvh;
             position: relative;
             z-index: 1;
             perspective: 1000px;
             opacity: 0;
             transform: translateY(20px);
             transition: all 0.8s ease-out;
+            padding: max(20px, 5vmin);
+            box-sizing: border-box;
         }
 
         #birthdayContent.show {
@@ -168,10 +170,13 @@
             text-align: center;
             color: white;
             z-index: 2;
-            padding: 20px;
+            padding: max(20px, 5vmin);
             position: relative;
             transform-style: preserve-3d;
             animation: messageFloat 3s ease-in-out infinite;
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
         }
 
         @keyframes messageFloat {
@@ -180,13 +185,14 @@
         }
 
         h1 {
-            font-size: 5rem;
-            margin-bottom: 2rem;
+            font-size: clamp(2.5rem, 8vw, 5rem);
+            margin-bottom: clamp(1rem, 4vw, 2rem);
             text-shadow: 0 0 10px rgba(255, 105, 180, 0.5),
                          0 0 20px rgba(255, 105, 180, 0.3),
                          0 0 30px rgba(255, 105, 180, 0.2);
             animation: glow 2s ease-in-out infinite alternate;
             letter-spacing: 2px;
+            line-height: 1.2;
         }
 
         @keyframes glow {
@@ -206,14 +212,14 @@
             display: none;
             background: rgba(255, 255, 255, 0.1);
             backdrop-filter: blur(10px);
-            padding: 3rem;
+            padding: clamp(1.5rem, 5vw, 3rem);
             border-radius: 20px;
-            max-width: 80%;
-            margin: 2rem auto;
+            width: min(90%, 800px);
+            margin: clamp(1rem, 4vw, 2rem) auto;
             transform: scale(0) rotateX(-30deg);
             transition: all 0.8s cubic-bezier(0.34, 1.56, 0.64, 1);
             color: white;
-            font-size: 1.8rem;
+            font-size: clamp(1.2rem, 4vw, 1.8rem);
             text-align: center;
             box-shadow: 0 0 30px rgba(255, 105, 180, 0.2);
             border: 1px solid rgba(255, 255, 255, 0.1);
@@ -243,6 +249,12 @@
             transform: scale(1) rotateX(0);
         }
 
+        .card p {
+            font-size: clamp(1.2rem, 4vw, 1.8rem);
+            line-height: 1.6;
+            margin-bottom: clamp(1rem, 3vw, 1.5rem);
+        }
+
         .confetti {
             position: absolute;
             width: 8px;
@@ -266,13 +278,13 @@
             background: transparent;
             border: 2px solid rgba(255, 255, 255, 0.8);
             color: white;
-            padding: 1.2rem 2.5rem;
-            font-size: 1.4rem;
+            padding: clamp(0.8rem, 3vw, 1.2rem) clamp(1.5rem, 5vw, 2.5rem);
+            font-size: clamp(1rem, 4vw, 1.4rem);
             border-radius: 50px;
             cursor: pointer;
             transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
             font-family: 'Dancing Script', cursive;
-            margin-top: 2rem;
+            margin-top: clamp(1rem, 4vw, 2rem);
             position: relative;
             overflow: hidden;
             text-shadow: 0 0 10px rgba(255, 255, 255, 0.3);
@@ -323,16 +335,13 @@
             #videoContainer.show-rotate #mainVideo {
                 display: none;
             }
-            h1 {
-                font-size: 3.5rem;
+            .video-card {
+                width: 95%;
+                height: auto;
+                aspect-ratio: 9/16;
             }
-            .card {
-                font-size: 1.4rem;
-                padding: 2rem;
-            }
-            button {
-                padding: 1rem 2rem;
-                font-size: 1.2rem;
+            .card p {
+                font-size: clamp(1rem, 3.5vw, 1.4rem);
             }
         }
 
@@ -341,8 +350,27 @@
                 font-size: 2.8rem;
             }
             .card {
-                font-size: 1.2rem;
-                padding: 1.5rem;
+                padding: clamp(1rem, 4vw, 1.5rem);
+            }
+            .card p {
+                font-size: clamp(0.9rem, 3vw, 1.2rem);
+            }
+        }
+
+        /* Add support for foldable devices */
+        @media (screen-spanning: single-fold-vertical) {
+            body {
+                padding: 0;
+            }
+        }
+
+        /* Add support for devices with notches */
+        @supports (padding: max(0px)) {
+            body {
+                padding-left: max(0px, env(safe-area-inset-left));
+                padding-right: max(0px, env(safe-area-inset-right));
+                padding-top: max(0px, env(safe-area-inset-top));
+                padding-bottom: max(0px, env(safe-area-inset-bottom));
             }
         }
     </style>
@@ -374,9 +402,6 @@
     </div>
 
     <div id="videoContainer">
-        <div class="rotate-prompt">
-            Please rotate your device for the best experience 🔄
-        </div>
         <div class="video-card">
             <video id="mainVideo" playsinline preload="auto">
                 <source src="https://github.com/maybeitsme123/rahiq_bd/raw/refs/heads/main/main.mp4" type="video/mp4">
@@ -396,18 +421,6 @@
         // Show birthday content immediately
         birthdayContent.classList.add('show');
 
-        function checkOrientation() {
-            if (window.innerWidth < 768 && window.innerHeight > window.innerWidth) {
-                videoContainer.classList.add('show-rotate');
-            } else {
-                videoContainer.classList.remove('show-rotate');
-            }
-        }
-
-        // Check orientation on load and resize
-        window.addEventListener('load', checkOrientation);
-        window.addEventListener('resize', checkOrientation);
-        window.addEventListener('orientationchange', checkOrientation);
 
         // Create confetti
         function createConfetti() {
