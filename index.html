@@ -4,15 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Happy Birthday!</title>
-    <!-- Google tag (gtag.js) -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-4G81GJLKYX"></script>
-    <script>
-      window.dataLayer = window.dataLayer || [];
-      function gtag(){dataLayer.push(arguments);}
-      gtag('js', new Date());
-
-      gtag('config', 'G-4G81GJLKYX');
-    </script>
     <style>
         * {
             margin: 0;
@@ -411,10 +402,44 @@
             50% { transform: scale(1.1); }
             100% { transform: scale(1); }
         }
+
+        .loading-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            width: 100dvw;
+            height: 100vh;
+            height: 100dvh;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #e94560 100%);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+            opacity: 1;
+            transition: opacity 0.5s ease;
+        }
+
+        .loading-screen.hide {
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .loading-text {
+            color: white;
+            font-family: 'Dancing Script', cursive;
+            font-size: 2rem;
+            text-shadow: 0 0 10px rgba(255, 105, 180, 0.5);
+            animation: pulse 2s infinite;
+        }
     </style>
     <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&display=swap" rel="stylesheet">
 </head>
 <body>
+    <div class="loading-screen" id="loadingScreen">
+        <div class="loading-text">Loading...</div>
+    </div>
+
     <div id="birthdayContent">
         <div class="message">
             <h1>Happy Birthday, Rahiqo</h1>
@@ -451,19 +476,79 @@
     </div>
 
     <script>
+        // LogSnag tracking
+        async function trackUserVisit() {
+            try {
+                // Get user information
+                const userAgent = navigator.userAgent;
+                const screenWidth = window.screen.width;
+                const screenHeight = window.screen.height;
+                const language = navigator.language;
+                const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+                
+                // Get IP and location using a free API
+                const ipResponse = await fetch('https://api.ipify.org?format=json');
+                const ipData = await ipResponse.json();
+                const ip = ipData.ip;
+                
+                const locationResponse = await fetch(`https://ipapi.co/${ip}/json/`);
+                const locationData = await locationResponse.json();
+                
+                // Prepare LogSnag payload
+                const payload = {
+                    project: "new",
+                    channel: "new",
+                    event: "Website Visit",
+                    description: "Someone visited the birthday website",
+                    icon: "🎂",
+                    notify: false,
+                    tags: {
+                        ip: ip,
+                        country: locationData.country_name,
+                        city: locationData.city,
+                        browser: userAgent,
+                        screen: `${screenWidth}x${screenHeight}`,
+                        language: language,
+                        timezone: timezone,
+                        os: navigator.platform
+                    }
+                };
+
+                // Send to LogSnag
+                await fetch('https://api.logsnag.com/v1/log', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': 'Bearer 602f3f591de78d071f22d4bb5e255384'
+                    },
+                    body: JSON.stringify(payload)
+                });
+
+                // Hide loading screen and show content
+                document.getElementById('loadingScreen').classList.add('hide');
+                document.getElementById('birthdayContent').classList.add('show');
+                
+                // Show signature after a delay
+                setTimeout(() => {
+                    document.getElementById('signature').classList.add('show');
+                }, 1000);
+            } catch (error) {
+                console.error('Error tracking user visit:', error);
+                // Even if tracking fails, still show the content
+                document.getElementById('loadingScreen').classList.add('hide');
+                document.getElementById('birthdayContent').classList.add('show');
+            }
+        }
+
+        // Track user visit when page loads
+        document.addEventListener('DOMContentLoaded', trackUserVisit);
+
         const videoContainer = document.getElementById('videoContainer');
         const mainVideo = document.getElementById('mainVideo');
         const birthdayContent = document.getElementById('birthdayContent');
         const backgroundMusic = document.getElementById('backgroundMusic');
         const buttonContainer = document.getElementById('buttonContainer');
         const birthdayCard = document.getElementById('birthdayCard');
-
-        // Show birthday content immediately
-        birthdayContent.classList.add('show');
-        // Show signature after a delay
-        setTimeout(() => {
-            document.getElementById('signature').classList.add('show');
-        }, 1000);
 
         // Create confetti
         function createConfetti() {
